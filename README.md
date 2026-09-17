@@ -32,13 +32,20 @@ During passive network monitoring, an unencrypted multicast DNS (mDNS) query res
 
 ### Case Study 2: Cleartext HTTP Traffic Inspection & Session Auditing
 
-*(Documentation and screenshot evidence to be populated during ongoing traffic capturing)*
+This analysis evaluates the security posture of traditional plaintext communication channels over the open internet. By inspecting traffic traversing an unencrypted transport medium, plaintext data footprints can be readily indexed, captured, and parsed without a cryptographic handshake layout.
+
+![Cleartext HTTP Request Audit](2http_cleartext.png)
+
+#### 🔍 Technical Analysis of the Capture:
+*   **Protocol/Layer:** Hypertext Transfer Protocol (HTTP / Application Layer)
+*   **Target Packet Verified:** Packet **#10365** (Outbound `GET` Request)
+*   **Internal Source Node:** `192.168.0.232` -> **Target Destination WAN Node:** `34.223.124.45`
+*   **Data Footprint Disclosed:** The payload architecture explicitly transmits parameters in cleartext. As indexed in the Hex/ASCII layer pane (right side), critical transport attributes like the target application host structure (`Host: neverssl.com`) and local workstation identifiers (`User-Agent: Mozilla/5.0...`) cross the wire unencrypted.
+*   **Mitigation Strategy:** Enforce global HTTP Strict Transport Security (HSTS) flags and migrate legacy web applications exclusively to HTTPS (TLS 1.3) execution contexts to shield metadata and prevent adversary-in-the-middle injection vectors.
 
 ---
 
 ### Case Study 3: Connection Anomalies & Session Resets
-
-*(Documentation and screenshot evidence to be populated during ongoing traffic capturing)*
 
 ---
 
