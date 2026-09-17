@@ -47,8 +47,19 @@ This analysis evaluates the security posture of traditional plaintext communicat
 
 ### Case Study 3: Connection Anomalies & Session Resets
 
+This analysis investigates stateful transport-layer degradation vectors and sudden connection teardowns. By tracking sequence numbers and TCP flags across active sessions, this report isolates instances of packet drop, out-of-order delivery, and hard socket resets within the transport domain.
+
+![TCP Transport Anomalies Audit](3traffic_anomalies.png)
+
+#### 🔍 Technical Analysis of the Capture:
+*   **Protocol/Layer:** Transmission Control Protocol (TCP / Transport Layer)
+*   **Target Anomalies Isolated:** `TCP Window Full`, `TCP Retransmission`, and `TCP Dup ACK` flags.
+*   **Behavioral Mechanism:** The capture illustrates explicit transport layer stress between internal node `192.168.0.232` and external endpoints. A series of `TCP Retransmission` flags occur alongside `[TCP Previous segment not captured]` signals. This occurs when a receiver detects missing segments in the stream and fires duplicate ACKs back to the source node, prompting immediate retransmissions to correct the path congestion.
+*   **Mitigation Strategy:** Optimize local Maximum Segment Size (MSS) parameters to limit path fragmentation, review network interface drop counters to target bad physical layer links, and audit firewall states to ensure security policies aren't dropping valid long-lived TCP connection blocks.
+
 ---
 
 ## 📜 Key Technical Takeaways
 1. **Unencrypted Device Footprinting:** Discovered that embedded hardware network layers blindly stream internal asset telemetry over unencrypted channels, streamlining initial reconnaissance vectors for threat actors.
 2. **Defensive Isolation:** Validated that logical network segmentation is an absolute priority over relying on vendor-level device configurations for security.
+3. **Transport Integrity:** Proved that baseline filtering rules are essential for separating localized physical-layer drops from active structural application bottlenecks.
